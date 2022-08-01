@@ -18,7 +18,6 @@ namespace CertHeader
             get { return "CertHeaderMap"; }
         }
 
-
         // In the Init function, register for HttpApplication 
         // events by adding your handlers.
         public void Init(HttpApplication application)
