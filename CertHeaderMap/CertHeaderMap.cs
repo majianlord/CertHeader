@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Web;
 using CertHeader.Logging;
 using NLog;
-
+using OTDS.RR;
 
 namespace CertHeader
 {
@@ -38,15 +38,48 @@ namespace CertHeader
             HttpContext current = HttpContext.Current;
 
             HttpClientCertificate theHttpCertificate = HttpContext.Current.Request.ClientCertificate;
+            string strTicket = "";
+            Boolean Tickchecked = false;
 
+            //Grab OTDS Ticket
+            HttpCookie Ticket = HttpContext.Current.Request.Cookies["OTDSTicket"];
+            if (Ticket != null)
+            {
+                 strTicket = Ticket.Value;
+            }
+
+            //Grab Processing Flag
+            HttpCookie TickCheckCookie = HttpContext.Current.Request.Cookies["Tickchecked"];
+            if (TickCheckCookie != null)
+            {
+                Tickchecked = bool.Parse(TickCheckCookie.Value);
+            }
            
+            //If we have a Certificate
             if (theHttpCertificate != null)
             {
                 string EDIPI = theHttpCertificate.Subject.ToString().Right(10);
                 Log.Instance.Info(ModuleName + " : " + theHttpCertificate.Subject.ToString().Right(10));
                 if (EDIPI != null)
-                {
+                { 
                     current.Request.Headers.Add("EDIPI", EDIPI);
+                }
+                //If we already have an OTDS Check lets check if that user has been assigned an CAC ID
+                if (!string.IsNullOrEmpty(strTicket))
+                {
+                    //Setup the Proxy
+                    Proxy.OTDS oTDS = new Proxy.OTDS();
+                    //Pull the user for this OTDS Ticket
+                    CurrentUserResponse User =  oTDS.CurrentUser(strTicket);
+                    // We got a User back lets check for the EDIPI info
+                    if (User != null)
+                    {
+                        OtdsUser Userinf = new OtdsUser(User.user);
+                        if (string.IsNullOrEmpty(Userinf.oTExtraAttr0))
+                        {
+
+                        }
+                    }
                 }
             }
             else
