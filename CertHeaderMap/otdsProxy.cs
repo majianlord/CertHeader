@@ -219,6 +219,35 @@ namespace Proxy
             return Execute<UsersPostResponse>(request, true);
         }
 
+        public GeneralReply TwoFactorStatusSet(Twofactorstate TwoFactor, string UserID)
+        {
+            RestRequest request = new RestRequest();
+            request.Method = Method.Put;
+            request.Resource = "otdsws/rest/users/{user_id}/twofactorstate";
+            request.AddParameter("user_id", UserID, ParameterType.UrlSegment);
+            request.AddJsonBody(TwoFactor);
+            return Execute<GeneralReply>(request, true);
+        }
+
+
+        public Twofactorstate TwoFactorStatusGet(string UserID)
+        {
+            RestRequest request = new RestRequest();
+            request.Method = Method.Get;
+            request.Resource = "otdsws/rest/users/{user_id}/twofactorstate";
+            request.AddParameter("user_id", UserID, ParameterType.UrlSegment);
+            return Execute<Twofactorstate>(request, true);
+        }
+
+
+
+
+
+
+
+
+
+
         private void SetupMasterOtds()
         {
             if (string.IsNullOrEmpty(STRMasterOTDSTicket))

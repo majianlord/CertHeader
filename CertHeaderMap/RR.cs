@@ -334,6 +334,13 @@ namespace OTDS.RR
     }
 }
 
+public class Twofactorstate
+{
+    public bool suspended { get; set; }
+    public DateTime suspendedUntil { get; set; }
+    public string enrollmentState { get; set; }
+    public string enrollmentUrl { get; set; }
+}
 
 
 public class OtdsUser
@@ -365,5 +372,13 @@ public class OtdsUser
         else
             oTExtraAttr1 = tmpVal.values[0].ToString();
     }
+
+
+    
+
+
+
+
+
 }
 
