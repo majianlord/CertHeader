@@ -342,8 +342,11 @@ public class OtdsUser
     public string oTExtraAttr1 { get; set; }
     public string oTExternalID3 { get; set; }
 
+    public OTDS.RR.User WorkingUser { get; set; }
+
     public OtdsUser(OTDS.RR.User argUser)
     {
+        WorkingUser = argUser;
         OTDS.RR.GenericValue tmpVal;
 
         tmpVal = argUser.values.FirstOrDefault(y => y.name.ToLower() == "otexternalid3");
